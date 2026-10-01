@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>2-Month Wrapped: Jashan & Kirat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;700&family=Fredoka:wght@400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            /* Romantic, vibrant pink-red and lavender blush */
+            --primary-red: #D81B60; 
+            --light-bg: #FFF0F5; 
+        }
+        body {
+            background-color: var(--primary-red);
+            font-family: 'Fredoka', sans-serif;
+            overflow-x: hidden;
+            color: white;
+            user-select: none;
+        }
+        .handwriting {
+            font-family: 'Caveat', cursive;
+        }
+        .elegant {
+            font-family: 'Playfair Display', serif;
+        }
+        
+        /* Smooth fade transitions */
+        .screen {
+            display: none;
+            opacity: 0;
+            transition: opacity 0.6s ease-in-out, transform 0.6s ease-in-out;
+            min-height: 100vh;
+            width: 100%;
+            transform: translateY(20px);
+        }
+        .screen.active {
+            display: flex;
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Polaroid styling */
+        .polaroid {
+            background: var(--light-bg);
+            padding: 15px 15px 40px 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border-radius: 4px;
+            color: var(--primary-red);
+        }
+        .polaroid:hover {
+            transform: scale(1.05) rotate(2deg) !important;
+            z-index: 10;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+        ::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.4); border-radius: 10px; }
+        
+        .floating {
+            animation: float 4s ease-in-out infinite;
+        }
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-12px); }
+            100% { transform: translateY(0px); }
+        }
+
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            15% { transform: scale(1.15); }
+            30% { transform: scale(1); }
+            45% { transform: scale(1.15); }
+            60% { transform: scale(1); }
+            100% { transform: scale(1); }
+        }
+        .heartbeat {
+            animation: heartbeat 1.5s infinite;
+        }
+
+        /* Notebook Paper Background */
+        .notebook-bg {
+            background-color: var(--light-bg);
+            background-image: repeating-linear-gradient(transparent, transparent 39px, rgba(216, 27, 96, 0.25) 39px, rgba(216, 27, 96, 0.25) 40px), url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.25%22/%3E%3C/svg%3E');
+            background-size: 100% 40px, 100% 100%;
+            line-height: 40px;
+        }
+
+        /* Heart Pattern Background */
+        .heart-pattern-bg {
+            background-image: url('data:image/svg+xml;utf8,<svg width="40" height="40" xmlns="http://www.w3.org/2000/svg"><path d="M20 35l-2.4-2.2C10 26 5 21.5 5 15.5 5 10.8 8.8 7 13.5 7c2.6 0 5 1.2 6.5 3 1.5-1.8 3.9-3 6.5-3 4.7 0 8.5 3.8 8.5 8.5 0 6-5 10.5-12.6 17.3L20 35z" fill="%23D81B60" opacity="0.8"/></svg>');
+            background-size: 50px 50px;
+            background-color: white;
+        }
+        
+        /* Bulletproof Heart Mask for images */
+        .heart-mask {
+            -webkit-mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 90 C50 90, 15 65, 5 35 C-5 8, 30 -5, 50 20 C70 -5, 105 8, 95 35 C85 65, 50 90, 50 90 Z'/%3E%3C/svg%3E");
+            -webkit-mask-size: contain;
+            -webkit-mask-repeat: no-repeat;
+            -webkit-mask-position: center;
+            mask-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M50 90 C50 90, 15 65, 5 35 C-5 8, 30 -5, 50 20 C70 -5, 105 8, 95 35 C85 65, 50 90, 50 90 Z'/%3E%3C/svg%3E");
+            mask-size: contain;
+            mask-repeat: no-repeat;
+            mask-position: center;
+        }
+
+        /* Nav Buttons */
+        .nav-btn {
+            background: white;
+            color: var(--primary-red);
+            padding: 10px 24px;
+            border-radius: 9999px;
+            font-weight: bold;
+            font-size: 1.1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.2);
+            transition: all 0.3s;
+            z-index: 100;
+        }
+        .nav-btn:hover {
+            transform: scale(1.1);
+            background: var(--light-bg);
+        }
+
+        /* ----- Interactive Envelope CSS ----- */
+        #envelope-container {
+            perspective: 1200px;
+            -webkit-tap-highlight-color: transparent;
+        }
+        .top-flap {
+            transform-origin: top;
+            transition: transform 0.5s ease-in-out, z-index 0s 0.5s;
+        }
+        .letter-content {
+            transition: transform 0.7s cubic-bezier(0.25, 1, 0.5, 1) 0.3s, z-index 0s 0.5s, box-shadow 0.7s;
+            overflow: hidden; 
+        }
+        
+        /* Bulletproof Webkit Clip-Paths for Flaps */
+        .flap-bottom {
+            -webkit-clip-path: polygon(0 100%, 50% 45%, 100% 100%);
+            clip-path: polygon(0 100%, 50% 45%, 100% 100%);
+        }
+        .flap-left {
+            -webkit-clip-path: polygon(0 0, 55% 50%, 0 100%);
+            clip-path: polygon(0 0, 55% 50%, 0 100%);
+        }
+        .flap-right {
+            -webkit-clip-path: polygon(100% 0, 45% 50%, 100% 100%);
+            clip-path: polygon(100% 0, 45% 50%, 100% 100%);
+        }
+        .flap-top {
+            -webkit-clip-path: polygon(0 0, 100% 0, 50% 55%);
+            clip-path: polygon(0 0, 100% 0, 50% 55%);
+        }
+        
+        /* Opened State */
+        #envelope-container.is-open .top-flap {
+            transform: rotateX(180deg);
+            z-index: 10; 
+        }
+        #envelope-container.is-open .wax-seal-wrapper {
+            opacity: 0;
+            transform: translate(-50%, -50%) scale(0) !important;
+        }
+        #envelope-container.is-open .click-me-text {
+            opacity: 0;
+        }
+
+        /* Responsive Letter Pop-out adjustments - Increased translateY to pull letter higher */
+        @media (min-width: 769px) {
+            #envelope-container.is-open .letter-content {
+                transform: translateY(-240px) scale(1.05); 
+                z-index: 45; 
+                box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
+                overflow: visible;
+            }
+        }
+        @media (max-width: 768px) {
+            #envelope-container.is-open .letter-content {
+                transform: translateY(-180px) scale(1.02); 
+                z-index: 45; 
+                box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
+                overflow: visible;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <!-- Background Music -->
+    <audio id="main-bg-music" src="song.mp3" loop preload="auto"></audio>
+
+    <!-- Navigation Controls -->
+    <div class="fixed bottom-6 right-6 flex gap-4 z-50">
+        <button onclick="prevScreen()" id="prev-btn" class="nav-btn hidden">Back</button>
+        <button onclick="nextScreen()" id="next-btn" class="nav-btn hidden">Next</button>
+    </div>
+
+    <div class="w-full">
+
+        <!-- SCREEN 1: Start -->
+        <div id="screen-0" class="screen active flex-col items-center justify-center p-0 min-h-screen relative overflow-hidden bg-[var(--primary-red)]">
+            <div class="absolute inset-0 opacity-40 z-0" style="background-image: url('https://daisifystudio.my.canva.site/_assets/media/2775b866c46061621f540e0fbd2ee7fb.jpg'); background-size: cover; background-position: center;"></div>
+            
+            <div class="relative z-10 flex flex-col items-center text-center px-4">
+                <h1 class="elegant italic text-4xl md:text-6xl text-[#FFB6C1] mb-2">Welcome to your</h1>
+                <h1 class="text-6xl md:text-8xl font-bold mb-8 drop-shadow-xl tracking-tight">2-Month<br>Wrapped</h1>
+                <p class="handwriting text-3xl md:text-4xl mb-12 text-[#FFE4E1]">Jashan & Kirat's Data Story 💖</p>
+                
+                <button onclick="startWrapped()" class="heartbeat bg-[#FFB6C1] text-[var(--primary-red)] px-10 py-4 rounded-full font-bold text-2xl shadow-2xl border-4 border-white">
+                    Tap to Unwrap 🎁
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 2: The Redacted History -->
+        <div id="screen-1" class="screen flex-col items-center justify-center p-6 text-center relative notebook-bg text-[var(--primary-red)]">
+            <h1 class="text-4xl md:text-6xl font-bold mb-6 tracking-wide drop-shadow-md">The "Redacted" History</h1>
+            
+            <div class="flex flex-col md:flex-row items-center gap-8 z-10 max-w-4xl mx-auto">
+                <div class="polaroid transform -rotate-3 w-full md:w-1/2">
+                    <h2 class="handwriting text-4xl mb-4 font-bold text-black">Timeline: 60 Days</h2>
+                    <p class="text-xl font-medium leading-relaxed mt-4">But wait... our tracked data only shows the last 15-20 days!</p>
+                    <p class="elegant italic text-xl mt-4 text-gray-600 font-bold border-t-2 border-dashed border-pink-300 pt-4">"Earlier messages were lost to protect the innocent."</p>
+                </div>
+                
+                <div class="floating w-[250px] md:w-[300px]">
+                    <img src="https://daisifystudio.my.canva.site/_assets/video/bbd46bb7feaae5804098b672ba73435b.gif" class="w-full drop-shadow-xl" alt="Biting Bear">
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: Message Volume -->
+        <div id="screen-2" class="screen flex-col items-center justify-center p-6 relative" style="background-image: radial-gradient(circle at center, transparent 0%, #880E4F 150%), repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 12px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 12px); box-shadow: inset 0 0 100px rgba(0,0,0,0.5);">
+            <div class="text-center z-10">
+                <h2 class="elegant italic text-3xl md:text-4xl text-[#FFB6C1] mb-2">Message Volume</h2>
+                <h1 class="text-5xl md:text-8xl font-bold mb-12 drop-shadow-2xl">Who Dominated?</h1>
+            </div>
+
+            <div class="flex flex-col md:flex-row gap-8 z-10 w-full max-w-3xl px-4">
+                <div class="bg-white/10 backdrop-blur-md border-2 border-white/30 p-8 rounded-3xl w-full text-center hover:bg-white/20 transition duration-300">
+                    <h3 class="handwriting text-5xl text-[#FFB6C1] mb-4">Jashan</h3>
+                    <div class="text-6xl font-bold text-white mb-2 heartbeat">58%</div>
+                    <p class="text-lg opacity-80">(The Word Count King)</p>
+                </div>
+                
+                <div class="bg-white/10 backdrop-blur-md border-2 border-white/30 p-8 rounded-3xl w-full text-center hover:bg-white/20 transition duration-300">
+                    <h3 class="handwriting text-5xl text-[#FFB6C1] mb-4">Kirat</h3>
+                    <div class="text-6xl font-bold text-white mb-2">42%</div>
+                    <p class="text-lg opacity-80">(The Queen of "Hmm")</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: Peak Hours -->
+        <div id="screen-3" class="screen flex-col items-center justify-center p-6 text-center relative bg-gradient-to-b from-[#2A0825] via-[#4D0F3B] to-[#290924]">
+            <div class="absolute inset-0 opacity-30" style="background-image: radial-gradient(white 1px, transparent 1px); background-size: 50px 50px;"></div>
+            
+            <img src="https://c.tenor.com/-7DsLl4Pro8AAAAC/tenor.gif" class="w-[150px] md:w-[200px] mb-8 z-10 rounded-xl drop-shadow-[0_0_30px_rgba(255,255,255,0.3)]" alt="Night Owls">
+            
+            <div class="z-10 bg-black/40 p-8 md:p-12 rounded-3xl backdrop-blur-sm border border-pink-500/20 max-w-2xl">
+                <h2 class="elegant text-2xl md:text-5xl text-[#FFB6C1] mb-4">The 1 AM - 3 AM Club</h2>
+                <h1 class="text-4xl md:text-7xl font-black text-white mb-6 tracking-widest">PEAK HOURS</h1>
+                <p class="text-lg md:text-2xl leading-relaxed text-pink-100">Your heaviest conversation window occurs right after midnight.</p>
+                <p class="handwriting text-2xl md:text-3xl text-pink-300 mt-6">Fueled by late-night study sessions, exam stress, and overthinking! ☕</p>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: Vocab & Emojis -->
+        <div id="screen-4" class="screen flex-col items-center justify-center p-6 text-center relative notebook-bg text-[var(--primary-red)]">
+            <h1 class="text-4xl md:text-6xl font-bold mb-8">The Romantic Index 💌</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl w-full z-10 px-4">
+                <!-- Vocab -->
+                <div class="polaroid transform rotate-2">
+                    <h2 class="elegant font-bold text-2xl mb-6 border-b-2 border-dashed border-[var(--primary-red)] pb-2">Vocabulary Leaderboard</h2>
+                    <ul class="text-left text-lg md:text-xl space-y-4 font-medium px-2 md:px-4">
+                        <li class="flex justify-between items-center"><span class="handwriting text-2xl md:text-3xl font-bold">Baby / Kake</span> <span class="bg-[#FFF0F5] px-3 py-1 rounded-full text-[var(--primary-red)]">Top!</span></li>
+                        <li class="flex justify-between items-center"><span class="handwriting text-2xl md:text-3xl font-bold">Love u</span> <span class="bg-[#FFF0F5] px-3 py-1 rounded-full text-[var(--primary-red)]">100+</span></li>
+                        <li class="flex justify-between items-center"><span class="handwriting text-2xl md:text-3xl font-bold text-gray-600">Bhai / Bro</span> <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">Way too much</span></li>
+                        <li class="flex justify-between items-center"><span class="handwriting text-2xl md:text-3xl font-bold text-gray-600">Pagal / Duffer</span> <span class="bg-gray-100 px-3 py-1 rounded-full text-sm">Daily</span></li>
+                    </ul>
+                </div>
+
+                <!-- Emojis -->
+                <div class="polaroid transform -rotate-2">
+                    <h2 class="elegant font-bold text-2xl mb-6 border-b-2 border-dashed border-[var(--primary-red)] pb-2">Top 5 Emojis</h2>
+                    <div class="flex flex-wrap justify-center gap-4 text-4xl md:text-6xl mt-8">
+                        <span class="hover:scale-125 transition duration-300 floating" style="animation-delay: 0s;">😭</span>
+                        <span class="hover:scale-125 transition duration-300 floating" style="animation-delay: 0.2s;">😂</span>
+                        <span class="hover:scale-125 transition duration-300 floating" style="animation-delay: 0.4s;">🫂</span>
+                        <span class="hover:scale-125 transition duration-300 floating" style="animation-delay: 0.6s;">😋</span>
+                        <span class="hover:scale-125 transition duration-300 floating" style="animation-delay: 0.8s;">❤</span>
+                    </div>
+                    <p class="mt-8 text-lg font-medium italic">"The coping mechanisms."</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: The Anomaly -->
+        <div id="screen-5" class="screen flex-col items-center justify-center p-6 text-center relative overflow-hidden bg-[var(--primary-red)]">
+            <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: linear-gradient(#fff 2px, transparent 2px), linear-gradient(90deg, #fff 2px, transparent 2px); background-size: 50px 50px;"></div>
+            
+            <div class="bg-[var(--light-bg)] text-[var(--primary-red)] p-8 md:p-12 rounded-3xl shadow-2xl max-w-3xl w-full relative z-10 border-4 border-[#FFB6C1]">
+                <h2 class="elegant italic text-xl md:text-3xl mb-2 text-gray-500">September 18 Anomaly</h2>
+                <h1 class="text-4xl md:text-6xl font-black mb-8 text-[var(--primary-red)]">The Love Flood 🌊</h1>
+                
+                <div class="flex items-center justify-center gap-4 md:gap-6 mb-8">
+                    <img src="heart.png" class="w-12 h-12 md:w-16 md:h-16 floating" style="animation-delay: 0s;" onerror="this.style.display='none'">
+                    <span class="text-7xl md:text-9xl font-black heartbeat text-[var(--primary-red)] drop-shadow-md">72</span>
+                    <img src="heart.png" class="w-12 h-12 md:w-16 md:h-16 floating" style="animation-delay: 0.5s;" onerror="this.style.display='none'">
+                </div>
+                
+                <p class="text-lg md:text-2xl font-medium leading-relaxed">
+                    Between 10:01 PM and 10:35 PM, dozens of rapid-fire <br><span class="handwriting text-3xl md:text-4xl text-pink-600 font-bold">"I love you"</span> and heart variations were spammed in under 35 minutes!
+                </p>
+            </div>
+        </div>
+
+        <!-- SCREEN 7: Hackathons vs Romance -->
+        <div id="screen-6" class="screen flex-col items-center justify-center p-6 text-center relative bg-[#2D0310] text-white">
+            <h1 class="elegant text-3xl md:text-6xl text-[#FFB6C1] mb-12">Hackathons vs. Romance 💻❤️</h1>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-6xl w-full px-2 md:px-4">
+                <div class="bg-white/10 p-6 md:p-8 rounded-3xl border border-pink-500/20 backdrop-blur-sm hover:-translate-y-2 transition duration-300">
+                    <h2 class="text-2xl md:text-3xl font-bold mb-6 text-rose-300">The Tech Stack</h2>
+                    <div class="flex flex-wrap justify-center gap-3 text-sm md:text-base">
+                        <span class="bg-rose-500/30 px-4 py-2 rounded-full font-mono text-rose-100">SIH</span>
+                        <span class="bg-rose-500/30 px-4 py-2 rounded-full font-mono text-rose-100">Niograph</span>
+                        <span class="bg-rose-500/30 px-4 py-2 rounded-full font-mono text-rose-100">SunFLAAR</span>
+                        <span class="bg-rose-500/30 px-4 py-2 rounded-full font-mono text-rose-100">Prize Pool</span>
+                        <span class="bg-rose-500/30 px-4 py-2 rounded-full font-mono text-rose-100">DSA</span>
+                    </div>
+                </div>
+
+                <div class="bg-[#D81B60]/80 p-6 md:p-8 rounded-3xl border border-pink-400/50 backdrop-blur-sm hover:-translate-y-2 transition duration-300 relative overflow-hidden">
+                    <div class="absolute -right-4 -top-4 text-7xl md:text-8xl opacity-20">🏆</div>
+                    <h2 class="text-2xl md:text-3xl font-bold mb-4 text-[#FFB6C1]">The Late-Night Debugging Award</h2>
+                    <p class="text-lg md:text-xl leading-relaxed text-pink-50">For attempting to solve C++ stack valid parenthesis code past 11 PM... and again at 6 AM.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 8: Inside Jokes -->
+        <div id="screen-7" class="screen flex-col items-center justify-center p-6 text-center relative notebook-bg text-[var(--primary-red)]">
+            <h1 class="text-4xl md:text-7xl font-black mb-12 drop-shadow-sm">Inside Joke Hall of Fame</h1>
+            
+            <div class="flex flex-col lg:flex-row gap-8 max-w-6xl w-full">
+                <div class="polaroid transform -rotate-3 hover:rotate-0 flex-1">
+                    <div class="text-5xl md:text-6xl mb-4">🚪</div>
+                    <p class="handwriting text-2xl md:text-3xl font-bold">"Knock Knock... your favorite distraction"</p>
+                </div>
+                <div class="polaroid transform rotate-2 hover:-rotate-0 flex-1 lg:scale-110 z-10">
+                    <div class="text-5xl md:text-6xl mb-4">🦖</div>
+                    <p class="handwriting text-2xl md:text-3xl font-bold text-pink-600">"Khaa jaungi"</p>
+                    <p class="text-xs md:text-sm font-bold uppercase mt-2 text-gray-500">(Threats of cannibalism as a love language)</p>
+                </div>
+                <div class="polaroid transform -rotate-2 hover:rotate-0 flex-1">
+                    <div class="text-5xl md:text-6xl mb-4">💻</div>
+                    <p class="handwriting text-2xl md:text-3xl font-bold">"You are my Position 0"</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 9: Professional Distance (Fully Responsive & Fixed Heart) -->
+        <div id="screen-8" class="screen flex-col lg:flex-row items-center justify-center p-0 relative bg-[var(--primary-red)]">
+            
+            <!-- Left/Top Side: Heart Pattern Background -->
+            <div class="w-full lg:w-[40%] h-[35vh] lg:h-full heart-pattern-bg flex items-center justify-center relative shadow-inner lg:shadow-none">
+                <!-- Solid CSS Masked Heart Image -->
+                <div class="relative w-[180px] h-[180px] md:w-[300px] md:h-[300px] z-10 filter drop-shadow-xl mt-4 lg:mt-0">
+                    <div class="w-full h-full heart-mask bg-white">
+                        <img src="https://1stanniversary-kirat.vercel.app/night.png" alt="Couple" class="w-full h-full object-cover scale-110">
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right/Bottom Side: Content Area -->
+            <div class="w-full lg:w-[60%] flex items-center justify-center p-6 lg:p-12 relative z-10 -mt-10 lg:mt-0">
+                <div class="bg-white text-[var(--primary-red)] p-8 md:p-16 rounded-[40px] shadow-2xl max-w-2xl w-full text-center border-4 border-pink-100 lg:border-none">
+                    <h2 class="elegant italic text-lg md:text-3xl mb-4 text-gray-400">The "Professional Distance" Meter</h2>
+                    <h1 class="text-5xl md:text-8xl font-black mb-6 heartbeat text-[var(--primary-red)]">14 Times</h1>
+                    <p class="text-base md:text-2xl font-medium leading-relaxed border-t-2 border-dashed border-pink-200 pt-6">
+                        Kirat demanded keeping things strictly professional, staying <span class="text-[var(--primary-red)] font-bold whitespace-nowrap">"2 meters away,"</span> and not acting like a couple around teammates.
+                    </p>
+                    <img src="https://daisifystudio.my.canva.site/_assets/video/b15cd53ea5249003ea0c8176e6ecad65.gif" class="w-20 md:w-32 mx-auto mt-6" alt="Cute Bears">
+                </div>
+            </div>
+            
+        </div>
+
+        <!-- SCREEN 10: Final Card (INTERACTIVE ENVELOPE) -->
+        <div id="screen-9" class="screen flex-col items-center justify-center p-4 relative overflow-hidden bg-[var(--primary-red)]" style="background-image: radial-gradient(circle at center, transparent 0%, #880E4F 150%), repeating-linear-gradient(45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 12px), repeating-linear-gradient(-45deg, rgba(255,255,255,0.04) 0px, rgba(255,255,255,0.04) 2px, transparent 2px, transparent 12px); box-shadow: inset 0 0 100px rgba(0,0,0,0.5);">
+            
+            <!-- Clickable Envelope Container -->
+            <div id="envelope-container" class="relative w-[320px] md:w-[480px] h-[260px] md:h-[350px] z-30 cursor-pointer group mt-20" onclick="this.classList.add('is-open')">
+                
+                <!-- Envelope Back -->
+                <div class="absolute inset-0 bg-[#F8BBD0] shadow-2xl rounded-md z-10"></div>
+                
+                <!-- The Letter (Hidden inside initially - INCREASED HEIGHT TO PREVENT OVERFLOW) -->
+                <!-- h-[120%] makes the letter taller than the envelope so it can hold all the text -->
+                <div class="letter-content absolute left-[3%] right-[3%] bottom-[3%] h-[125%] md:h-[115%] bg-[var(--light-bg)] flex flex-col items-center justify-between py-5 px-3 md:py-6 md:px-8 text-center rounded-md z-20" style="background-image: url('data:image/svg+xml,%3Csvg viewBox=%220 0 200 200%22 xmlns=%22http://www.w3.org/2000/svg%22%3E%3Cfilter id=%22n%22%3E%3CfeTurbulence type=%22fractalNoise%22 baseFrequency=%220.8%22 numOctaves=%223%22 stitchTiles=%22stitch%22/%3E%3C/filter%3E%3Crect width=%22100%25%22 height=%22100%25%22 filter=%22url(%23n)%22 opacity=%220.15%22/%3E%3C/svg%3E');">
+                    
+                    <h1 class="handwriting text-3xl md:text-5xl text-[var(--primary-red)] font-bold mb-1">Happy 2 Months! 😭😘</h1>
+                    
+                    <p class="text-[11px] md:text-sm text-pink-900 font-medium leading-tight">
+                        Officially certifying you both as the <br>
+                        <span class="font-bold text-[var(--primary-red)] bg-white px-1 md:px-2 rounded shadow-sm">Co-Founders of High On Caffeine.</span>
+                    </p>
+                    
+                    <p class="handwriting text-[14px] md:text-xl text-pink-700 leading-tight px-1 mb-1">
+                        Here's to surviving long distance, hackathon plans, exam evals, and late-night bugs.
+                        <br><span class="font-bold">WE WERE REALLY HIGH ON CAFFEINE!!</span>
+                    </p>
+
+                    <p class="font-bold text-[14px] md:text-xl text-[var(--primary-red)]">Love you, Momos. 🫂❤️</p>
+                    <p class="font-bold text-[12px] md:text-lg text-[var(--primary-red)] px-2 leading-tight">Me bas ehna hi kehna am all yours bbyy all yourrs alll...❤️❤️❤️❤️</p>
+                    
+                    <div class="flex flex-col items-center mt-1">
+                        <img src="https://media1.tenor.com/m/QN_x8cDJzC4AAAAC/cosytales-couple.gif" class="w-12 md:w-16 rounded-lg mb-1 shadow-sm" alt="Cozy Couple">
+                        <p class="handwriting text-lg md:text-2xl text-pink-600 font-bold">Jaldi jaldi milo, I can't wait!</p>
+                    </div>
+                </div>
+                
+                <!-- Envelope Front Bottom Flap -->
+                <div class="flap-bottom absolute inset-0 bg-[#F06292] z-30 drop-shadow-[0_-3px_6px_rgba(0,0,0,0.15)] rounded-b-md pointer-events-none"></div>
+                
+                <!-- Envelope Front Side Flaps -->
+                <div class="flap-left absolute inset-0 bg-[#F48FB1] z-30 drop-shadow-[2px_0_4px_rgba(0,0,0,0.1)] rounded-bl-md pointer-events-none"></div>
+                <div class="flap-right absolute inset-0 bg-[#F48FB1] z-30 drop-shadow-[-2px_0_4px_rgba(0,0,0,0.1)] rounded-br-md pointer-events-none"></div>
+                
+                <!-- Envelope Top Flap (The part that flips open) -->
+                <div class="top-flap flap-top absolute inset-0 bg-[#F48FB1] z-40 drop-shadow-[0_4px_4px_rgba(0,0,0,0.15)] rounded-t-md pointer-events-none"></div>
+                
+                <!-- Centered Wax Seal Wrapper -->
+                <div class="wax-seal-wrapper absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50 pointer-events-none transition-all duration-500">
+                    <div class="w-[60px] md:w-[80px] h-[60px] md:h-[80px] bg-[#D81B60] rounded-full flex items-center justify-center shadow-xl border border-[#C2185B] heartbeat">
+                        <div class="w-[46px] md:w-[60px] h-[46px] md:h-[60px] rounded-full border-2 border-[#F48FB1]/60 flex items-center justify-center text-white text-2xl md:text-3xl shadow-inner">
+                            ❤️
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Call to action hint -->
+                <p class="click-me-text absolute -bottom-14 left-0 right-0 text-center text-pink-200 animate-pulse font-medium text-lg md:text-xl pointer-events-none transition-opacity duration-300">Tap to open 💌</p>
+
+            </div>
+
+            <!-- Fireworks/Confetti effect substitute -->
+            <div class="absolute top-10 flex gap-8 z-0 opacity-50">
+                <span class="text-4xl floating" style="animation-delay: 0s;">✨</span>
+                <span class="text-4xl floating" style="animation-delay: 1s;">🎉</span>
+                <span class="text-4xl floating" style="animation-delay: 0.5s;">💖</span>
+                <span class="text-4xl floating" style="animation-delay: 1.5s;">💻</span>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const totalScreens = 10; 
+        let currentScreenIndex = 0;
+        let userHasInteracted = false;
+
+        function updateNavigation() {
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+
+            if (currentScreenIndex === 0) {
+                prevBtn.classList.add('hidden');
+                nextBtn.classList.add('hidden');
+            } else {
+                prevBtn.classList.remove('hidden');
+                nextBtn.classList.remove('hidden');
+            }
+
+            if (currentScreenIndex === 1) {
+                prevBtn.style.opacity = '0.5';
+                prevBtn.style.pointerEvents = 'none';
+            } else {
+                prevBtn.style.opacity = '1';
+                prevBtn.style.pointerEvents = 'auto';
+            }
+
+            if (currentScreenIndex === totalScreens - 1) {
+                nextBtn.style.opacity = '0.5';
+                nextBtn.style.pointerEvents = 'none';
+                nextBtn.innerText = "Finish ❤️";
+            } else {
+                nextBtn.style.opacity = '1';
+                nextBtn.style.pointerEvents = 'auto';
+                nextBtn.innerText = "Next";
+            }
+        }
+
+        function playAudio() {
+            if (!userHasInteracted) {
+                userHasInteracted = true;
+                const audio = document.getElementById('main-bg-music');
+                audio.play().catch(e => console.log("Audio autoplay prevented"));
+            }
+        }
+
+        function startWrapped() {
+            playAudio();
+            nextScreen();
+        }
+
+        function goToScreen(index) {
+            if (index < 0 || index >= totalScreens) return;
+            
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            
+            const target = document.getElementById(`screen-${index}`);
+            target.classList.add('active');
+            window.scrollTo(0, 0);
+            
+            currentScreenIndex = index;
+            updateNavigation();
+        }
+
+        function nextScreen() {
+            goToScreen(currentScreenIndex + 1);
+        }
+
+        function prevScreen() {
+            goToScreen(currentScreenIndex - 1);
+        }
+
+        updateNavigation();
+    </script>
+</body>
+</html>
